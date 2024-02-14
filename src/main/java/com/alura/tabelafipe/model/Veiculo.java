@@ -15,19 +15,9 @@ public record Veiculo(@JsonAlias("TipoVeiculo") Integer tipoVeiculo,
 	@Override
 	public String toString() {
         return """
-        		
-        		TipoVeiculo: %d
-				Valor: %s
-				Marca: %s
-				Modelo: %s
-				AnoModelo: %d
-				Combustivel: %s
-				CodigoFipe: %s
-				MesReferencia: %s
-				SiglaCombustivel: %s
-        		""".formatted(this.tipoVeiculo,this.valor,this.marca,
-        				this.modelo,this.anoModelo,this.combustivel,
-        				this.codigoFipe,this.mesReferencia,this.siglaCombustivel);
+				Valor: %s -||- Marca: %s -||- Modelo: %s -||- Ano: %d -||- Combustivel: %s
+        		""".formatted(this.valor,this.marca,
+        				this.modelo,this.anoModelo,this.combustivel);
     }
 
 }

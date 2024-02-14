@@ -1,5 +1,6 @@
 package com.alura.tabelafipe.principal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,7 +38,7 @@ public class Principal {
 		String dados = consumoApi.obterDados(String.format("%s%s%s", BASE_URL,tipoVeiculo.toLowerCase(),MARCAS));
 		
 		List<MeioDeTransporte> marcas = conversor.montaListaDeDados(dados, MeioDeTransporte.class);
-//		System.out.println(marcas);
+		System.out.println(marcas);
 		
 		System.out.println("Escolha a marca pelo código: ");
 		Integer marca = scanner.nextInt();
@@ -46,7 +47,7 @@ public class Principal {
 		String dadosMarca = consumoApi.obterDados(String.format("%s%s%s/%s%s", BASE_URL,tipoVeiculo.toLowerCase(),MARCAS,marca,MODELOS));
 		
 		Modelo modelo = conversor.converteDados(dadosMarca, Modelo.class);
-//		System.out.println(modelo);
+		System.out.println(modelo);
 		
 		System.out.println("Digite um trecho do modelo que deseja: ");
 		String trechoModelo = scanner.nextLine();
@@ -58,15 +59,18 @@ public class Principal {
 		
 		String modeloAnos = consumoApi.obterDados(String.format("%s%s%s/%s%s/%s%s", BASE_URL,tipoVeiculo.toLowerCase(),MARCAS,marca,MODELOS,codigoModelo,ANOS));
 		List<AnoTipo> anoTipo = conversor.montaListaDeDados(modeloAnos, AnoTipo.class);
-		
-		anoTipo.stream().forEach(System.out::println);
-		
+		anoTipo.forEach(System.out::println);
+
 		System.out.println("Digite o ano do modelo que deseja: ");
 		String anoModelo = scanner.nextLine();
-		
-		String anoDoModelo = consumoApi.obterDados(String.format("%s%s%s/%s%s/%s%s/%s", BASE_URL,tipoVeiculo.toLowerCase(),MARCAS,marca,MODELOS,codigoModelo,ANOS,anoModelo));
-		Veiculo veiculo = conversor.converteDados(anoDoModelo, Veiculo.class);
-		
-		System.out.println(veiculo);
+		List<Veiculo> listaVeiculos = new ArrayList<>();
+
+		for (int i = 0; i < anoTipo.size(); i++) {
+			String anoDoModelo = consumoApi.obterDados(String.format("%s%s%s/%s%s/%s%s/%s", BASE_URL,tipoVeiculo.toLowerCase(),MARCAS,marca,MODELOS,codigoModelo,ANOS,anoTipo.get(i).ano()));
+			listaVeiculos.add(conversor.converteDados(anoDoModelo, Veiculo.class));
+		}
+
+		System.out.println("\nTodos os veículos filtrados com avaliações por ano: ");
+		listaVeiculos.forEach(System.out::println);
 	}
 }
